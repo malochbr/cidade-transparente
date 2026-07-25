@@ -1,7 +1,11 @@
 FROM php:8.2-apache
 
-RUN a2dismod mpm_event mpm_worker || true
-RUN a2enmod mpm_prefork
+# Remove TODOS os MPMs habilitados e força apenas o prefork
+RUN rm -f /etc/apache2/mods-enabled/mpm_*.conf \
+           /etc/apache2/mods-enabled/mpm_*.load && \
+    ln -s /etc/apache2/mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf && \
+    ln -s /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/mpm_prefork.load
+
 RUN docker-php-ext-install pdo pdo_mysql mysqli
 RUN a2enmod rewrite
 
