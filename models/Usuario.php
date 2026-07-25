@@ -44,6 +44,22 @@ class Usuario {
     }
 
     /**
+     * Busca um usuário cadastrado através do número de telefone.
+     *
+     * @param string $telefone Telefone do usuário
+     * @return array|null Dados do usuário ou null se não encontrado
+     */
+    public function findByTelefone(string $telefone): ?array {
+        $telLimpo = preg_replace('/\D/', '', $telefone);
+        if (empty($telLimpo)) return null;
+        $query = "SELECT * FROM usuarios WHERE REPLACE(REPLACE(REPLACE(REPLACE(telefone, '(', ''), ')', ''), '-', ''), ' ', '') = :tel LIMIT 1";
+        $consulta = $this->db->prepare($query);
+        $consulta->execute([':tel' => $telLimpo]);
+        $usuario = $consulta->fetch();
+        return $usuario ?: null;
+    }
+
+    /**
      * Busca um usuário pelo ID primário, removendo a senha do array de retorno.
      *
      * @param int $idUsuario ID único do usuário

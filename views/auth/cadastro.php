@@ -49,6 +49,9 @@ $dados = $dados ?? $data ?? [];
         <div class="form-group">
             <label class="form-label" for="telefone">Telefone / WhatsApp</label>
             <input type="text" id="telefone" name="telefone" class="form-input" data-mask="telefone" placeholder="(83) 90000-0000" value="<?= sanitize($dados['telefone'] ?? '') ?>" required>
+            <?php if (!empty($erros['telefone'])): ?>
+                <div class="input-error-msg" style="color: #d32f2f; font-size: 12px; margin-top: 4px; font-weight: 600;">⚠️ <?= sanitize($erros['telefone']) ?></div>
+            <?php endif; ?>
         </div>
 
         <div class="form-group">

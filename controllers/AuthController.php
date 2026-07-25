@@ -113,6 +113,12 @@ class AuthController {
                 $erros['cpf'] = 'Este CPF já está cadastrado no sistema.';
             }
 
+            if (empty($dados['telefone'])) {
+                $erros['telefone'] = 'Informe o seu telefone / WhatsApp.';
+            } elseif ($this->usuarioModel->findByTelefone($dados['telefone'])) {
+                $erros['telefone'] = 'Este número de telefone / WhatsApp já está cadastrado em outra conta.';
+            }
+
             if (empty($dados['email']) || !filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) {
                 $erros['email'] = 'Informe um endereço de e-mail válido.';
             } elseif ($this->usuarioModel->findByEmail($dados['email'])) {
