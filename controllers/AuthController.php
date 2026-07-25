@@ -19,7 +19,6 @@ class AuthController {
      * Exibe a tela de boas-vindas (splash screen) do aplicativo.
      */
     public function splash(): void {
-        // Redireciona o usuário para a página inicial se já estiver logado
         if (isLoggedIn()) {
             redirect('?page=home');
         }
@@ -37,7 +36,6 @@ class AuthController {
 
         $erros = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Proteção contra solicitações forjadas entre sites (CSRF)
             if (!verify_csrf()) {
                 redirect('?page=auth/login');
             }
@@ -53,16 +51,16 @@ class AuthController {
             }
 
             if (empty($erros)) {
-                // Busca os dados do usuário no banco pelo CPF informado
                 $usuario = $this->usuarioModel->findByCpf($cpf);
 
-                // Valida a senha comparando com o hash seguro do banco
-                if (!$usuario || !password_verify($senha, $usuario['senha'])) {
-                    $erros[] = 'CPF ou senha incorretos.';
+                if (!$usuario) {
+                    $erros[] = 'CPF não cadastrado no sistema.';
+                } elseif (!password_verify($senha, $usuario['senha'])) {
+                    $erros[] = 'Senha incorreta. Tente novamente.';
                 } elseif ($usuario['ativo'] == 0) {
                     $erros[] = 'Sua conta está suspensa ou desativada devido ao limite de reputação.';
                 } else {
-                    // Login bem-sucedido: regenera o ID de sessão para prevenir ataque de fixação de sessão
+                    // Login bem-sucedido
                     session_regenerate_id(true);
                     $_SESSION['user_id'] = $usuario['id'];
                     $_SESSION['user'] = $usuario;
@@ -104,23 +102,23 @@ class AuthController {
                 'lgpd' => isset($_POST['lgpd'])
             ];
 
-            // Validações de preenchimento obrigatório e unicidade
+            // Validações de preenchimento obrigatório, CPF e unicidade
             if (empty($dados['nome'])) {
                 $erros['nome'] = 'O nome completo é obrigatório.';
             }
+
             if (empty($dados['cpf']) || !Usuario::validarCpf($dados['cpf'])) {
-                $erros['cpf'] = 'Informe um CPF válido.';
+                $erros['cpf'] = 'O CPF informado é inválido. Verifique os números digitados.';
             } elseif ($this->usuarioModel->findByCpf($dados['cpf'])) {
                 $erros['cpf'] = 'Este CPF já está cadastrado no sistema.';
             }
 
             if (empty($dados['email']) || !filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) {
-                $erros['email'] = 'Informe um e-mail válido.';
+                $erros['email'] = 'Informe um endereço de e-mail válido.';
             } elseif ($this->usuarioModel->findByEmail($dados['email'])) {
-                $erros['email'] = 'Este e-mail já está cadastrado.';
+                $erros['email'] = 'Este e-mail já está em uso por outro usuário.';
             }
 
-            // Exige no mínimo 8 caracteres com 1 letra maiúscula e 1 número
             if (strlen($dados['senha']) < 8 || !preg_match('/[A-Z]/', $dados['senha']) || !preg_match('/[0-9]/', $dados['senha'])) {
                 $erros['senha'] = 'A senha deve ter no mínimo 8 caracteres, com pelo menos 1 letra maiúscula e 1 número.';
             }
@@ -133,7 +131,6 @@ class AuthController {
                 $erros['lgpd'] = 'Você precisa aceitar os termos da LGPD.';
             }
 
-            // Se não houver nenhum erro de validação, insere o usuário no banco
             if (empty($erros)) {
                 $idUsuario = $this->usuarioModel->create($dados);
                 if ($idUsuario) {

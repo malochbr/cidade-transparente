@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../layout/header.php';
 $flash = getFlash();
+$erros = $erros ?? $errors ?? [];
 ?>
 <div class="screen-body">
     <div class="back-header">
@@ -24,10 +25,10 @@ $flash = getFlash();
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($errors)): ?>
-            <div class="flash-message flash-error" style="padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 8px; background: #FFEBEE; color: #C62828;">
-                <?php foreach ($errors as $err): ?>
-                    <p style="margin-bottom: 2px;">• <?= sanitize($err) ?></p>
+        <?php if (!empty($erros)): ?>
+            <div class="flash-message flash-error" style="padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 12px; background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A;">
+                <?php foreach ($erros as $err): ?>
+                    <p style="margin-bottom: 2px; font-weight: 600;">⚠️ <?= sanitize($err) ?></p>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
