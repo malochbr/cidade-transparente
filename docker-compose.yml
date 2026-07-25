@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    container_name: cidade_transparente_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: cidade123
+      MYSQL_DATABASE: cidade_transparente
+      MYSQL_USER: cidade_user
+      MYSQL_PASSWORD: cidade123
+    ports:
+      - "3306:3306"
+    volumes:
+      - cidade_db_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    command: --default-authentication-plugin=mysql_native_password
+
+  php:
+    build: .
+    container_name: cidade_transparente_php
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_NAME: cidade_transparente
+      DB_USER: cidade_user
+      DB_PASS: cidade123
+
+volumes:
+  cidade_db_data:

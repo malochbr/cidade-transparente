@@ -1,0 +1,8 @@
+# Node / Uploads / IDE
+node_modules/
+.env
+.idea/
+.vscode/
+*.log
+.DS_Store
+Thumbs.db
