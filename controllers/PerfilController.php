@@ -77,10 +77,11 @@ class PerfilController {
             $novaSenha = $_POST['nova_senha'] ?? '';
             $confirmarSenha = $_POST['confirmar_senha'] ?? '';
 
-            $usuario = $this->usuarioModel->findById($_SESSION['user_id']);
+            $usuario = $this->usuarioModel->findWithPasswordById($_SESSION['user_id']);
+            $hashSenhaAtual = $usuario['senha'] ?? '';
 
             // Valida se a senha atual digitada confere com o hash salvo no banco
-            if (!password_verify($senhaAtual, $usuario['senha'])) {
+            if (!$usuario || empty($hashSenhaAtual) || !password_verify($senhaAtual, $hashSenhaAtual)) {
                 $erros[] = 'A senha atual está incorreta.';
             }
 

@@ -79,6 +79,20 @@ class Usuario {
     }
 
     /**
+     * Busca um usuário pelo ID primário incluindo o hash de senha para validação.
+     *
+     * @param int $idUsuario ID único do usuário
+     * @return array|null Dados completos do usuário com hash de senha ou null
+     */
+    public function findWithPasswordById(int $idUsuario): ?array {
+        $query = "SELECT * FROM usuarios WHERE id = :id LIMIT 1";
+        $consulta = $this->db->prepare($query);
+        $consulta->execute([':id' => $idUsuario]);
+        $usuario = $consulta->fetch();
+        return $usuario ?: null;
+    }
+
+    /**
      * Insere um novo cidadão no banco de dados com senha criptografada em BCrypt.
      *
      * @param array $dados Formulário com nome, cpf, telefone, email e senha
