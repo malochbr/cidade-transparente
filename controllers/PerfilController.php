@@ -85,8 +85,8 @@ class PerfilController {
             }
 
             // Exige no mínimo 8 caracteres com 1 letra maiúscula e 1 número
-            if (strlen($novaSenha) < 8 || !preg_match('/[A-Z]/', $novaSenha) || !preg_match('/[0-9]/', $novaSenha)) {
-                $erros[] = 'A nova senha deve ter no mínimo 8 caracteres, com pelo menos 1 maiúscula e 1 número.';
+            if (strlen($novaSenha) < 8) {
+                $erros[] = 'A nova senha deve ter no mínimo 8 caracteres (são aceitos caracteres especiais como @, /, !, #, etc).';
             }
 
             if ($novaSenha !== $confirmarSenha) {

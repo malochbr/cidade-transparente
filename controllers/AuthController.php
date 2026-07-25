@@ -125,8 +125,8 @@ class AuthController {
                 $erros['email'] = 'Este e-mail já está em uso por outro usuário.';
             }
 
-            if (strlen($dados['senha']) < 8 || !preg_match('/[A-Z]/', $dados['senha']) || !preg_match('/[0-9]/', $dados['senha'])) {
-                $erros['senha'] = 'A senha deve ter no mínimo 8 caracteres, com pelo menos 1 letra maiúscula e 1 número.';
+            if (strlen($dados['senha']) < 8) {
+                $erros['senha'] = 'A senha deve ter no mínimo 8 caracteres (são aceitos caracteres especiais como @, /, !, #, etc).';
             }
 
             if ($dados['senha'] !== $dados['confirmar_senha']) {
