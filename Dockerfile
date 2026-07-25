@@ -38,6 +38,12 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && echo "Listen 0.0.0.0:80" > /etc/apache2/ports.conf \
     && sed -i 's/<VirtualHost \*:80>/<VirtualHost 0.0.0.0:80>/' /etc/apache2/sites-enabled/000-default.conf
 
+# Ensure Apache serves index.php by default so the front controller pattern
+# works when requesting the root URL or any directory. Without this, Apache
+# has no DirectoryIndex configured at the virtual host level and will not
+# know to hand requests off to index.php.
+RUN sed -i '/DocumentRoot \/var\/www\/html/a\\tDirectoryIndex index.php index.html' /etc/apache2/sites-enabled/000-default.conf
+
 EXPOSE 80
 
 CMD ["apache2ctl", "-D", "FOREGROUND"]
