@@ -29,6 +29,15 @@ COPY .htaccess /var/www/html/.htaccess
 
 RUN echo '<Directory /var/www/html>\n    AllowOverride All\n    Require all granted\n</Directory>' >> /etc/apache2/apache2.conf
 
+# Ensure Apache explicitly listens on port 80 for IPv4 connections and set a
+# default ServerName to suppress the "Could not reliably determine the
+# server's fully qualified domain name" warning. Without an explicit
+# ServerName, Apache can be slow/unreliable to bind, which causes health
+# checks to time out.
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
+    && echo "Listen 0.0.0.0:80" > /etc/apache2/ports.conf \
+    && sed -i 's/<VirtualHost \*:80>/<VirtualHost 0.0.0.0:80>/' /etc/apache2/sites-enabled/000-default.conf
+
 EXPOSE 80
 
 CMD ["apache2ctl", "-D", "FOREGROUND"]
