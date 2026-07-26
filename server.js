@@ -93,14 +93,6 @@ const server = http.createServer((req, res) => {
 </head>
 <body>
 <div class="phone-container">
-    <div class="status-bar">
-        <span class="time">9:41</span>
-        <div class="status-icons">
-            <svg viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4" y="2" width="3" height="10" rx="1"/><rect x="8" y="1" width="3" height="11" rx="1"/><rect x="12" y="0" width="3" height="12" rx="1"/></svg>
-            <svg viewBox="0 0 16 12" fill="none"><path d="M1 4C3.8 1.3 12.2 1.3 15 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M3.5 6.5C5.5 4.6 10.5 4.6 12.5 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="10" r="1.5" fill="currentColor"/></svg>
-            <svg viewBox="0 0 25 12" fill="currentColor"><rect x="0" y="1" width="22" height="10" rx="3" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="3" width="15" height="6" rx="1.5"/><path d="M23 4.5v3a1.5 1.5 0 0 0 0-3z"/></svg>
-        </div>
-    </div>
     ${content}
     ${page.startsWith('auth/') ? '' : nav}
 </div>

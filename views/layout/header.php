@@ -14,12 +14,3 @@ $pageTitle = $pageTitle ?? 'Cidade Transparente';
 </head>
 <body>
 <div class="phone-container">
-    <!-- Barra de Status Simulada -->
-    <div class="status-bar">
-        <span>9:41</span>
-        <div class="icons">
-            <span>📶</span>
-            <span>📡</span>
-            <span>🔋</span>
-        </div>
-    </div>

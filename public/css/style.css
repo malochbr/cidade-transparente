@@ -59,18 +59,9 @@ body {
   overflow: hidden;
 }
 
-/* Simulated Status Bar */
+/* Simulated Status Bar (Disabled) */
 .status-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 24px 4px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #1a1a1a;
-  flex-shrink: 0;
-  background: #fff;
-  z-index: 100;
+  display: none !important;
 }
 
 .status-bar .time {
